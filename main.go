@@ -1,7 +1,23 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"log"
+	"net/http"
+
+	"github.com/uyendava/go-calculator/handlers"
+)
 
 func main() {
-	fmt.Println("Welcome to my Go Calculator")
+	mux := http.NewServeMux()
+	mux.HandleFunc("/calculate", handlers.CalculateHandler)
+
+	fmt.Println("Server is running on http://localhost:8080")
+	server := &http.Server{
+		Addr:    ":8080",
+		Handler: mux,
+	}
+	if err := server.ListenAndServe(); err != nil {
+		log.Fatalf("Could not listen on :8080: %v\n", err)
+	}
 }
